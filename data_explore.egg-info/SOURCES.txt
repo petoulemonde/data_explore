@@ -1,0 +1,9 @@
+MANIFEST.in
+README.md
+data_explore.py
+setup.py
+data_explore.egg-info/PKG-INFO
+data_explore.egg-info/SOURCES.txt
+data_explore.egg-info/dependency_links.txt
+data_explore.egg-info/requires.txt
+data_explore.egg-info/top_level.txt
