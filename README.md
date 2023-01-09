@@ -50,6 +50,11 @@ of the MIT license.
 
 # Logs
 
+## Version 1.0.1 : 
+Error with math package: non matching distribution found.
+Correction:
+- setup.py: removal of the package math in the necessary packages
+
 ## Version 1.0.0 :
 
 - Creation of project

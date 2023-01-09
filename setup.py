@@ -14,9 +14,9 @@ setup(
     py_modules = ["data_explore"],
     # packages = ["data_explore", "numpy", "pandas", "plotly.express", "plotly.graph_objects", "tableone"],
     url = "https://github.com/petoulemonde/data_explore",
-    version = "1.0.0",
+    version = "1.0.1",
 
     # install_requires=["plotly.express", "plotly.graph_objects", "numpy", "pandas", "tableone"],
-    install_requires=["plotly", "numpy", "pandas", "tableone", "math"]
+    install_requires=["plotly", "numpy", "pandas", "tableone"]
 )
 

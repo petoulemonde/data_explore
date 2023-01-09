@@ -29,14 +29,9 @@ class data_explore:
 
 # ------------------------------------------------------------------------------
   def update(self, dataset, y = " ") :
-    """This function display a quick sum up of the dataset.
+    """This function update the dataset included in the data_explore object.
     
-    The glimpse function makes a global summary of the dataset. This summary is composed of 5 description elements: 
-    1/ shape of dataset, with name and type of variables,
-    2/ The first 20 lines of the dataset,
-    3/ the list of numerical variables of the dataset, with a numerical summary,
-    4/ The list of categorical variables, with a quick numerical summary,
-    5/ A table one of the dataset.
+    The update function update the dataset included in the data_explore object.
 
     Parameters
     ----------
@@ -221,29 +216,35 @@ class data_explore:
 
     if "1" in exec : 
       # List of catagorical variables
-      df = self.dataset.drop(self.dataset.select_dtypes(include = np.number).columns.tolist(), axis = 1)
-      print("Categorical columns are : " + str( df.columns.tolist() ) )
-      print("\n")
-      # Variable per variable description
-      print(self.dataset.drop(self.dataset.select_dtypes(include = np.number).columns.tolist(), axis = 1).describe())
-
+        df = self.dataset.drop(self.dataset.select_dtypes(include = np.number).columns.tolist(), axis = 1)
+        print("Categorical columns are : " + str( df.columns.tolist() ) )
+        print("\n")
+        # Variable per variable description
+        print(self.dataset.drop(self.dataset.select_dtypes(include = np.number).columns.tolist(), axis = 1).describe())
+      
     if "2" in exec : 
-      df_unmelt = self.dataset.drop(self.dataset.select_dtypes(include = np.number), axis = 1)
-      df = df_unmelt.melt()
-      n_rows = math.trunc(len(df_unmelt.columns)/2) + len(df_unmelt.columns)%2 
-      fig = make_subplots(rows = n_rows, 
-                          cols = 2,
-                          subplot_titles= pd.unique(df.variable.apply(lambda x: str("Variable: " + str(x)))) )
+      df_unmelt = self.dataset.drop(self.dataset.select_dtypes(include = np.number).columns.tolist(), axis = 1)
 
-      for i in range(1, n_rows+1) :
-        for j in range(1, 3) : 
-          fig.add_trace(
-              go.Histogram(x =  df[df.variable == pd.unique(df.variable)[i+j-2]].value,
-                          name = str( pd.unique( df[df.variable == pd.unique(df.variable)[i+j-2]].variable ) ) 
-                          ), 
-              # layout = go.Layout(title=go.layout.Title(text= str( pd.unique( df[df.variable == pd.unique(df.variable)[i+j-2]].variable ) ) ) ), 
-              row = i, col = j)
-      fig.show()
+      if len(df_unmelt.columns) < 2 :
+        fig = px.histogram(df_unmelt)
+        fig.show()
+      
+      else :
+        df = df_unmelt.melt()
+        n_rows = math.trunc(len(df_unmelt.columns)/2) + len(df_unmelt.columns)%2 
+        fig = make_subplots(rows = n_rows, 
+                            cols = 2,
+                            subplot_titles= pd.Series(pd.unique(df.variable)).apply(lambda x: "Variable: " + str(x)) )
+        x = 0
+        for i in range(1, n_rows+1) :
+          for j in range(1, 3) : 
+            if x < len(df_unmelt.columns):
+              fig.add_trace(
+                  go.Histogram(x = df[df.variable == pd.unique(df.variable)[x]].value ,
+                              name = pd.unique(df.variable)[x] ), 
+                  row = i, col = j )
+              x = x + 1
+        fig.show()
 
     if "3" in exec : 
       # Sunburst plot
